@@ -78,8 +78,6 @@ function tp
         mkdir -p $TP_DIR
     end
     
-    tput sgr0
-
     # If no arguments were passed...
     if test (count $argv) -eq 0
         tp_pwd
