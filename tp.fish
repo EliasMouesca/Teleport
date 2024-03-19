@@ -3,9 +3,6 @@
 # The dir where the locations are stored, may be changed
 set TP_DIR "/home/$USER/.config/tp"
 
-set bold 'tput bold'
-set normal 'tput sgr0'
-
 function tp_go_location -a NAME
     set DIR "$TP_DIR/$NAME"
 
@@ -97,7 +94,10 @@ function tp
 
                 if test -f /tmp/tp
                     echo
-                    echo '[temporary] -> ' (cat /tmp/tp)
+                    tput bold
+                    echo -n '[temporary]'
+                    tput sgr0
+                    echo ' ~>' (cat /tmp/tp)
                 end
 
             # tp -r [saved_location] => remove the specified location or the temporary if non are given
