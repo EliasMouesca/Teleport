@@ -36,7 +36,7 @@ Currently this is only available for the fish shell so I'll focus on that for th
 To use the tp command just download the **'tp.fish'** file and put it inside the _~/.config/fish/conf.d_ directory. Fish automatically imports all files inside that directory so next time you open a shell, it should load that configuration file, which specifies how the function should work.
 
 ## Conclusions
-Believe me, I would've loved to do this in c, or perhaps, python. But since the the working directory is part of the shell's state we can just _change it_ from another process. So I was forced to write the program as a function written in the shell's scripting language. This is the reason I'm kinda refusing to rewrite it for bash. Also, this is the reason for the program being kind of a mess: shell laguanges aren't really meant for large programs (not saying this is large, but it's not 20 lines long) and It's the first time I try programming in the fish language (and any shell language for that matter).
+Believe me, I would've loved to do this in c, or perhaps, python. But since the working directory is part of the shell's state we can just _change it_ from another process. So I was forced to write the program as a function written in the shell's scripting language. This is the reason I'm kinda refusing to rewrite it for bash. Also, this is the reason for the program being kind of a mess: shell laguanges aren't really meant for large programs (not saying this is large, but it's not 20 lines long) and It's the first time I try programming in the fish language (and any shell language for that matter).
 
 It was fun though! Excellent excuse to sit down and learn the fish language.
 
