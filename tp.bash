@@ -23,18 +23,13 @@ tp_create_location() {
         return 1
     fi
 
-    if [ "$(echo "$1" | cut -c1-1)" = '/' ]; then
-        echo 'Location names can not begin with a slash (\'/')'
+    if [[ "$1" =~ "/" ]]; then
+        echo "Location names can not contain a slash! ('/')"
         return 1
     fi
 
     if [ "$(echo "$1" | cut -c1-1)" = '.' ]; then
-        echo 'Location names can not begin with a dot (\'.')'
-        return 1
-    fi
-
-    if [ "$(echo "$1" | rev | cut -c1-1)" = '/' ]; then
-        echo 'Location names can not end with a slash (\'/')'
+        echo "Location names can not begin with a dot (\'.')"
         return 1
     fi
 

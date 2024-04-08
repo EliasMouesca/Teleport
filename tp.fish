@@ -24,18 +24,13 @@ function tp_create_location -a NAME WHERE LOCATION
         return 1
     end
 
-    if test (echo $NAME | cut -c1-1)  = '/'
-        echo 'Location names can not begin with a slash (\'/\')'
+    if string match -q '*/*' "$NAME"
+        echo 'Location names can not contain a slash! (\'/\')'
         return 1
     end
 
     if test (echo $NAME | cut -c1-1)  = '.'
         echo 'Location names can not begin with a dot (\'.\')'
-        return 1
-    end
-
-    if test (echo $NAME | rev | cut -c1-1) = '/'
-        echo 'Location names can not end with a slash (\'/\')'
         return 1
     end
 
