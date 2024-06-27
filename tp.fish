@@ -1,90 +1,39 @@
 # __ tp __
-
+set TP_DIR "/home/$USER/opt/Teleport"
 # The dir where the locations are stored, may be changed
-set TP_DIR "/home/$USER/.config/tp"
+set TP_LOCATIONS_DIR "$TP_DIR/locations"
+set TP_TMP "/tmp/tp"
 
-function tp_go_location -a NAME
-    set DIR "$TP_DIR/$NAME"
-
-    if test -f $DIR
-        cd (cat $DIR)
-        return 0
-    else
-        echo "'$NAME' is not a saved location!"
-        return 1
-    end
+for sourceFile in $TP_DIR/utils/*
+    source $sourceFile
 end
 
-function tp_create_location -a NAME WHERE LOCATION
-
-    set DIR "$WHERE/$NAME"
-
-    if not test -d $LOCATION
-        echo "'$LOCATION' directory does not exist!"
-        return 1
-    end
-
-    if string match -q '*/*' "$NAME"
-        echo 'Location names can not contain a slash! (\'/\')'
-        return 1
-    end
-
-    if test (echo $NAME | cut -c1-1)  = '.'
-        echo 'Location names can not begin with a dot (\'.\')'
-        return 1
-    end
-
-    touch $DIR
-
-    if test (echo $LOCATION | cut -c1-1)  = '/'
-        echo "$LOCATION" > $DIR
-    else
-        echo "$PWD/$LOCATION" > $DIR
-    end
-
-    echo "Saved '$NAME' location."
-
-end
-
-function tp_pwd
-
-    set DIR "/tmp/tp"
-
-    # If the file exists, go there, if not, save it temporarily
-    if test -f $DIR
-        cd (cat $DIR)
-        rm $DIR
-    else
-        touch /tmp/tp
-        pwd > /tmp/tp
-        echo 'Saved working directory.'
-    end
-
-end
-
+# Register the completion to fish
+complete -c tp -f -a "(basename -a (/usr/bin/ls $TP_LOCATIONS_DIR/*))"
 
 function tp
-
     # If the config directory does not exist, create it.
-    if not test -d $TP_DIR
-        mkdir -p $TP_DIR
+    if not test -d $TP_LOCATIONS_DIR
+        mkdir -p $TP_LOCATIONS_DIR
     end
     
     # If no arguments were passed...
     if test (count $argv) -eq 0
         tp_pwd
     else
-
-        # Check if the first letter is a '-', it means its a parameter
-        if test (echo $argv[1] | cut -c1-1)  = '-'
-
+        # Check if the first letter is a '-', that means it's a parameter
+        if not test (echo $argv[1] | cut -c1-1)  = '-'
+            tp_go_location $argv[1]
+        else
+            switch $argv[1]
             # tp -l => list saved locations
-            if test $argv[1] = '-l'
-                for location in (/usr/bin/ls $TP_DIR);
+            case '-l'
+                for location in (/usr/bin/ls $TP_LOCATIONS_DIR);
                     tput bold
                     echo -n "$location "
+                    tput setaf 8; echo -n "-> " 
                     tput sgr0
-                    echo \~\> (cat $TP_DIR/$location);
+                    echo (/usr/bin/cat $TP_LOCATIONS_DIR/$location);
                 end
 
                 if test -f /tmp/tp
@@ -92,11 +41,11 @@ function tp
                     tput bold
                     echo -n '[temporary]'
                     tput sgr0
-                    echo ' ~>' (cat /tmp/tp)
+                    echo ' ->' (cat /tmp/tp)
                 end
 
-            # tp -r [saved_location] => remove the specified location or the temporary if non are given
-            else if test $argv[1] = '-r'
+            # tp -r [saved_location] => remove the specified location or the temporary if none are given
+            case '-r'
                 if test (count $argv) -eq 1
                     if test -f /tmp/tp
                         rm /tmp/tp
@@ -106,11 +55,15 @@ function tp
 
                     for arg in $argv
                         if not test $arg = $argv[1]
-                            set LOCATION "$TP_DIR/$arg"
+                            set LOCATION "$TP_LOCATIONS_DIR/$arg"
                             if test -f $LOCATION
                                 rm $LOCATION
                             else
-                                echo "There is no saved location named '$arg'."
+                                echo -n "There is no saved location named '"
+                                tput bold
+                                echo -n "$arg"
+                                tput sgr0
+                                echo "'."
                                 set return (math $return + 1)
                             end
                         end
@@ -121,23 +74,26 @@ function tp
                 end
 
             # tp -c {name} [path] => create a new location with {name} and {path}, if no path is given, the working directory will be used
-            else if test $argv[1] = '-c'
+            case '-c'
                 if test (count $argv) -eq 3
-                    tp_create_location $argv[2] $TP_DIR $argv[3]
+                    tp_create_location $argv[2] $TP_LOCATIONS_DIR $argv[3]
                 else if test (count $argv) -eq 2
-                    tp_create_location $argv[2] $TP_DIR $PWD
+                    tp_create_location $argv[2] $TP_LOCATIONS_DIR $PWD
                 else
-                    echo 'Bad usage, try running \'tp -h\''
+                    echo -n "Bad usage, try running '"
+                    tput bold
+                    echo -n "tp -h"
+                    tput sgr0
+                    echo "'"
                     return 1
                 end
 
-            # tp -p {location} => print location instead of chaning directory
-            else if test $argv[1] = '-p'
+            # tp -p {location} => print location instead of changing directory
+            case '-p'
                 if test (count $argv) -eq 1
-                    echo 'You must specify the name of the location!'
-                    return 1
+                    tp_pwd_print
                 else
-                    set DIR "$TP_DIR/$argv[2]"
+                    set DIR "$TP_LOCATIONS_DIR/$argv[2]"
 
                     if test -f $DIR
                         /usr/bin/cat $DIR
@@ -150,29 +106,31 @@ function tp
 
 
             # tp -h => outputs help message
-            else if test $argv[1] = '-h'
-                echo $HELP_MESSAGE
-            else if test $argv[1] = '--help'
-                echo $HELP_MESSAGE
-            else
+            case '-h' '--help'
+                tput bold
+                echo $TP_HELP_HEADER
+                tput sgr0
+                echo $TP_HELP_MESSAGE
+            case '*'
                 echo "Option '$argv[1]' not recognized."
                 return 1
-            end
+            
+            end # End switch
 
-        else
-            tp_go_location $argv[1]
-        end
+        end # End if not a parameter
 
-    end
+    end # End if no arguments passed
 
 end
 
-set HELP_MESSAGE "-- TP command - help message --
+# Erase helper functions
+#functions -e tp_create_location tp_go_location tp_pwd
 
+set TP_HELP_HEADER "TP command - help message"
+set TP_HELP_MESSAGE "
 tp -l                   => list saved locations
 tp -c {name} [path]     => create a new location with {name} and {path}, if no path is given, the working directory will be used
 tp -r [saved_location]  => remove the specified location or the temporary if non are given
-tp -p {location}        => print location instead of changing directory
-tp -h                   => outputs help message
-"
+tp -p [location]        => print location instead of changing directory
+tp -h                   => outputs help message"
 
