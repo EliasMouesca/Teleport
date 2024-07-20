@@ -3,8 +3,8 @@ This is an idea I wish some shell would implement. But I actually built a workin
 
 The idea of the command is to _"teleport"_ between saved locations in the file system. Let's say you're configuring your shell, whose config file is in some deep nested directory, like "/home/$USER/.config/fish/". After some time of tinkering with the options you are satisfied with the look and feel, you close all the instances you opened for debugging, you save and close the config file and you go on with your day. But, 30 minutes later, you realize you actually want an alias for a command you forgot to implement. Now you have to search for the path to the file again, type it and cd into it; this would be _ok_ if you had to do this, let's say, once a week or two. But since I'm always tinkering with the config files of a lot of programs myself, I usually end up doing this 8 or 10 times a day if I've just recently installed the program and it needs a lot of configuration. **The answer to this problem is the 'tp' command!**
 
-![Create a location](demoImages/create.png)
-![Go back to home](demoImages/home.png)
+![Create a location](./demoPictures/create.png)
+![Go back to home](./demoPictures/home.png)
 
 Of course in that example tp doesn't make a lot of sense because you can simply go back to home doing "cd" but anyway, that's the idea.
 
