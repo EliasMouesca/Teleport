@@ -34,12 +34,15 @@ One can run tp without arguments to save the working directory. And the next tim
 
 ## Instalation
 1. Git clone the repo ```git clone https://github.com/elicapo133/Teleport.git```
-2. compile 'tpbin' ```makefile```
+2. Compile 'tpbin' ```make```
 3. Change the adapter script:
     * Where it says ```TP_BIN="/home/$USER/datos/GoProjects/Teleport/tpbin"```, put the path to the binary file.
 Clone this directory and **edit the fish variable "TP_DIR"** to point to the root of the repo. Then, create a symbolic link in _fish/config.d_ or source it right from _config.fish_
 4. Source it from your shell's config file:
- * fish: ```cd ~/.config/fish/conf.d/ && ln -s path/to/adapter_script"```
+ * fish: 
+        - Add ```source path/to/adapter_script``` in the config file
+        or
+        - ```cd ~/.config/fish/conf.d/ && ln -s path/to/adapter_script"```
  * bash: Add this on your .bashrc ```source path/to/adapter_script```
 
 ## Conclusions
