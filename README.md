@@ -39,11 +39,8 @@ One can run tp without arguments to save the working directory. And the next tim
     * Where it says ```TP_BIN="/home/$USER/datos/GoProjects/Teleport/tpbin"```, put the path to the binary file.
 Clone this directory and **edit the fish variable "TP_DIR"** to point to the root of the repo. Then, create a symbolic link in _fish/config.d_ or source it right from _config.fish_
 4. Source it from your shell's config file:
- * fish: 
-        - Add ```source path/to/adapter_script``` in the config file
-        or
-        - ```cd ~/.config/fish/conf.d/ && ln -s path/to/adapter_script"```
- * bash: Add this on your .bashrc ```source path/to/adapter_script```
+ * fish: Add ```source path/to/adapter_script``` to the config.fish file.
+ * bash/zsh: Add this on your .bashrc ```source path/to/adapter_script```.
 
 ## Conclusions
 These were my conclusions originally, when it was first coded in fish:
@@ -60,4 +57,5 @@ Now, I have refactored the code so that it can be ported to other shells. The id
 ### What we lost
 - Colors! Such a shame! There's no sane way for the binary file to communicate to the shell script what parts have to be which color.
 - Simplicity: the program is somewhat more complicated with the script adapting and so.
+
 

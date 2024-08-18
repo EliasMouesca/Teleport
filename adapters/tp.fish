@@ -1,3 +1,6 @@
+# Register completions
+complete -c tp -f -a "(basename -a (/usr/bin/ls /home/$USER/.config/Teleport/locations/*))"
+
 function tp
   set TP_BIN "/home/eli/opt/Teleport/bin/tpbin"
   set output (eval $TP_BIN $argv)
