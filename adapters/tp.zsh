@@ -1,4 +1,11 @@
-#!/bin/sh
+_tp_complete() {
+    local locations
+    locations=($(basename -a /home/$USER/.config/Teleport/locations/* 2>/dev/null))
+    compadd -a locations
+}
+
+compdef _tp_complete tp
+
 tp() {
   TP_BIN="/home/$USER/datos/GoProjects/Teleport/tpbin"
   output=$("$TP_BIN" "$@")
