@@ -20,8 +20,9 @@ func pwd() {
 		if err != nil {
 			die(err.Error())
 		}
-		fmt.Printf("Saved working directory!")
-		os.Exit(ExitSuccess)
+
+        endWithColors("Saved ", "working directory", ".", ExitSuccess)
+
 	} else {
 		path, err := os.ReadFile(TemporaryFile)
 		if err != nil {
@@ -37,39 +38,36 @@ func pwd() {
 }
 
 func goLocation(loc string) {
-	if exists(LocationsDirectory + loc) {
-		path, err := os.ReadFile(LocationsDirectory + loc)
-		if err != nil {
-			die(err.Error())
-		}
-		cd(string(path))
-	} else {
-		die("'" + loc + "' is not a saved location!")
-	}
+    assertIsALocation(loc)
+    path, err := os.ReadFile(LocationsDirectory + loc)
+    if err != nil {
+        die(err.Error())
+    }
+    cd(string(path))
 }
 
 func createLocation(name string, path string) {
 	if !isValidName(name) {
-		die("'" + name + "' is not a valid location name!")
+        dieNamed(name, "is not a valid location name!")
 	}
 
 	if exists(LocationsDirectory + name) {
-		die("'" + name + "' already exists!")
+        dieNamed(name, "already exists!")
 	}
 
 	info, err := os.Stat(path)
 	if err != nil {
-		die("'" + path + "' is not a valid path!")
+        dieNamed(path, "is not a valid path!")
 	} else if !info.IsDir() {
-		die("All locations must point to a directory!")
+		die("Locations must point to a directory!")
 	}
 
 	err = os.WriteFile(LocationsDirectory+name, []byte(path), 0666)
 	if err != nil {
-		die("Could NOT save location")
+		die("Could NOT save location.")
 	}
 
-	os.Exit(ExitSuccess)
+    endWithColors("Saved '", name, "' location.", ExitSuccess);
 
 }
 
@@ -105,9 +103,7 @@ func listLocations() {
 
 func removeLocation(names []string) {
 	for _, name := range names {
-		if !exists(LocationsDirectory + name) {
-			die("'" + name + "' is not a saved location!")
-		}
+        assertIsALocation(name)
 		err := os.Remove(LocationsDirectory + name)
 		if err != nil {
 			die(err.Error())
@@ -119,9 +115,7 @@ func removeLocation(names []string) {
 }
 
 func printLocation(name string) {
-	if !exists(LocationsDirectory + name) {
-		die("'" + name + "' is not a saved location!")
-	}
+    assertIsALocation(name)
 
 	path, err := os.ReadFile(LocationsDirectory + os.Args[2])
 	if err != nil {

@@ -3,6 +3,13 @@ complete -c tp -f -a "(basename -a (/usr/bin/ls /home/$USER/.config/Teleport/loc
 
 function tp
   set TP_BIN "/home/eli/opt/Teleport/bin/tpbin"
+
+  if status --is-command-substitution || not isatty stdin
+    set -gx TP_BEING_PIPED 1
+  else
+    set -e TP_BEING_PIPED
+  end
+
   set output (eval $TP_BIN $argv)
   set exit_status $status
 

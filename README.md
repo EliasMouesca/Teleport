@@ -53,9 +53,8 @@ Now, I have refactored the code so that it can be ported to other shells. The id
 - Speed: go is much faster than scripting languages, and since we make go do the heavy lifting, the command is faster overall.
 - Portability: coding things this way, we make tp portable to basically any computer, and the adapter shell scripts are trivial to code.
 - Readability: go is much more readable than scripting languages (at least in my opinion).
+- Robustness: go is great for handling errors, so yeah.
 
 ### What we lost
-- Colors! Such a shame! There's no sane way for the binary file to communicate to the shell script what parts have to be which color.
 - Simplicity: the program is somewhat more complicated with the script adapting and so.
-
 

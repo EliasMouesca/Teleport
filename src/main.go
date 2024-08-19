@@ -16,9 +16,16 @@ const (
 var (
 	LocationsDirectory string
 	TemporaryFile      string = "/tmp/tp"
+    BeingPiped         bool
 )
 
 func main() {
+    if os.Getenv("TP_BEING_PIPED") == "1" {
+        BeingPiped = true
+    } else {
+        BeingPiped = false
+    }
+
 	currentUser, err := user.Current()
 	if err != nil {
 		die("Failed to get user!")
@@ -32,6 +39,7 @@ func main() {
 			die("Failed to create locations directory: " + err.Error())
 		}
 	}
+
 
 	// Check if LocationsDirectory exists
 	if _, err := os.Stat(LocationsDirectory); err != nil {
@@ -80,11 +88,13 @@ func main() {
 		if len(os.Args) > 2 {
 			removeLocation(os.Args[2:])
 		} else {
-			err := os.Remove(TemporaryFile)
-			if err != nil {
-				die(err.Error())
-			}
-			os.Exit(ExitSuccess)
+            if exists(TemporaryFile) {
+                err := os.Remove(TemporaryFile)
+                if err != nil {
+                    die(err.Error())
+                }
+                os.Exit(ExitSuccess)
+            }
 		}
 
 	case "-p":
@@ -111,5 +121,7 @@ func main() {
 		printHelp()
 		os.Exit(ExitError)
 	}
+
+    os.Exit(ExitSuccess)
 
 }

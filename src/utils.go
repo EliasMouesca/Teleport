@@ -11,8 +11,48 @@ func die(str string) {
 	os.Exit(ExitError)
 }
 
+func dieNamed(name string, msg string) {
+    dieColored("'", name, "' " + msg)
+}
+
+func dieColored(begin string, name string, end string) {
+    endWithColors(begin, name, end, ExitError)
+}
+
+func endWithColors(begin string, name string, end string, code int) {
+    fmt.Print(begin)
+    bold()
+    fmt.Print(name)
+    clean()
+    fmt.Print(end)
+    os.Exit(code)
+}
+
+func bold() {
+    if !BeingPiped {
+        fmt.Print("\033[1m")
+    }
+}
+
+func clean() {
+    if !BeingPiped {
+        fmt.Print("\033[0m")
+    }
+}
+
+func color() {
+    if !BeingPiped {
+        fmt.Print("\033[34m")
+    }
+}
+
 func printOneLocation(name string, path string) {
-	fmt.Printf("%v -> %v\n", name, path)
+    bold()
+    fmt.Printf("%v", name)
+    color()
+    fmt.Printf(" -> ")
+    clean()
+    fmt.Printf("%v\n", path)
 }
 
 func cd(where string) {
@@ -32,7 +72,9 @@ func exists(path string) bool {
 }
 
 func printHelp() {
+    bold()
 	fmt.Println("TP command - help message")
+    clean()
 	fmt.Println("tp -l                   => list saved locations")
 	fmt.Println("tp -c {name} [path]     => create location '{name}' pointing to [path]")
 	fmt.Println("tp -r [saved_location]  => remove the specified location")
@@ -48,3 +90,10 @@ func isValidName(loc string) bool {
 	}
 	return !match
 }
+
+func assertIsALocation(name string) {
+    if !exists(LocationsDirectory + name) {
+        dieNamed(name, "is not a saved location!")
+    }
+}
+
