@@ -2,7 +2,7 @@
 complete -c tp -f -a "(basename -a (/usr/bin/ls /home/$USER/.config/Teleport/locations/*))"
 
 function tp
-  set TP_BIN "/home/eli/opt/Teleport/bin/tpbin"
+  set TP_BIN "/path/to/tpbin"
 
   if status --is-command-substitution || not isatty stdin
     set -gx TP_BEING_PIPED 1

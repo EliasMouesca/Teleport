@@ -7,7 +7,7 @@ _tp_complete() {
 compdef _tp_complete tp
 
 tp() {
-  TP_BIN="/home/$USER/datos/GoProjects/Teleport/tpbin"
+  TP_BIN="/path/to/tpbin"
   output=$("$TP_BIN" "$@")
   exit_status=$?
 

@@ -33,14 +33,16 @@ You can also have a fast glance of all saved locations or remove any location yo
 One can run tp without arguments to save the working directory. And the next time you run tp without arguments you'll be _teleported_ to the previously saved directory. Useful to point new shells to the directory you are working on without having to manually copy the PWD. This is the function that motivated the creation of this prototype!
 
 ## Instalation
-1. Git clone the repo ```git clone https://github.com/elicapo133/Teleport.git```
+1. Git clone the repo ```git clone https://github.com/elicapo133/Teleport.git``` and cd into it.
 2. Compile 'tpbin' ```make```
 3. Change the adapter script:
-    * Where it says ```TP_BIN="/home/$USER/datos/GoProjects/Teleport/tpbin"```, put the path to the binary file.
-Clone this directory and **edit the fish variable "TP_DIR"** to point to the root of the repo. Then, create a symbolic link in _fish/config.d_ or source it right from _config.fish_
+    * Where it says ```TP_BIN="/path/to/tpbin"```, change it to the path to the binary file (./bin/tpbin).
 4. Source it from your shell's config file:
  * fish: Add ```source path/to/adapter_script``` to the config.fish file.
  * bash/zsh: Add this on your .bashrc ```source path/to/adapter_script```.
+
+## TODO
+- Create an installer script so that it is easier to set this up
 
 ## Conclusions
 These were my conclusions originally, when it was first coded in fish:

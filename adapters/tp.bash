@@ -5,7 +5,7 @@ _tp_complete() {
 complete -F _tp_complete tp
 
 tp() {
-  TP_BIN="/home/$USER/datos/GoProjects/Teleport/tpbin"
+  TP_BIN="/path/to/tpbin"
 
   if [ -p /dev/stdin ] || [ "$BASH_SUBSHELL" -gt 0 ]; then
     export TP_BEING_PIPED="1"
