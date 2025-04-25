@@ -43,6 +43,7 @@ One can run tp without arguments to save the working directory. And the next tim
 
 ## TODO
 - Create an installer script so that it is easier to set this up
+- Add "-P" flag. It should make the location persistent, so that from now on when running tp without arguments, it defaults to that one instead. 
 
 ## Conclusions
 These were my conclusions originally, when it was first coded in fish:
